@@ -1,49 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View, Text } from "react-native";
-import PurchasePriceSlider from "./src/components/PurchasePriceSlider";
-import DownPaymentSlider from "./src/components/DownPaymentSlider";
-import RepaymentTimeSlider from "./src/components/RepaymentTimeSlider";
-import InterestRateSlider from "./src/components/InterestRateSlider";
+import React from "react";
+import { StyleSheet, SafeAreaView, ScrollView, View } from "react-native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer } from "@react-navigation/native";
+import InputScreen from "./src/components/InputScreen"; // Import InputScreen
+import QuoteScreen from "./src/components/QuoteScreen"; // Import QuoteScreen
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [purchasePrice, setPurchasePrice] = useState(50000);
-  const [downPayment, setDownPayment] = useState(0);
-  const [loanAmount, setLoanAmount] = useState(0);
-
-  const calculateLoanAmount = () => {
-    setLoanAmount(purchasePrice - downPayment);
-  };
-
-  useEffect(() => {
-    calculateLoanAmount();
-  }, [purchasePrice, downPayment]);
-
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <PurchasePriceSlider
-        purchasePrice={purchasePrice}
-        setPurchasePrice={setPurchasePrice}
-      />
-      <DownPaymentSlider
-        downPayment={downPayment}
-        setDownPayment={setDownPayment}
-      />
-      <RepaymentTimeSlider />
-      <InterestRateSlider />
-      <Text style={styles.label}>Loan Amount: {loanAmount}</Text>
-    </View>
+    <NavigationContainer style={styles.safeContainer}>
+      <Stack.Navigator initialRouteName="Input">
+        <Stack.Screen name="Input" component={InputScreen} />
+        <Stack.Screen name="Quote" component={QuoteScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeContainer: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 0,
-    margin: 0,
   },
 });
