@@ -14,8 +14,8 @@ const PurchasePriceSlider = () => {
       <Slider
         style={styles.slider}
         minimumValue={50000}
-        maximumValue={100000000} // Adjust maximum value to allow for larger prices
-        step={10000} // Larger step size for better control over large numbers
+        maximumValue={1500000} // Adjust maximum value to allow for larger prices
+        step={1000} // Larger step size for better control over large numbers
         value={purchasePrice}
         onValueChange={(value) => setPurchasePrice(value)}
         minimumTrackTintColor="#1FB28A"
