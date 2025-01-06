@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import PurchasePriceSlider from "./src/components/PurchasePriceSlider";
 import DownPaymentSlider from "./src/components/DownPaymentSlider";
 import RepaymentTimeSlider from "./src/components/RepaymentTimeSlider";
+import InterestRateSlider from "./src/components/InterestRateSlider";
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
       <PurchasePriceSlider />
       <DownPaymentSlider />
       <RepaymentTimeSlider />
+      <InterestRateSlider />
     </View>
   );
 }
