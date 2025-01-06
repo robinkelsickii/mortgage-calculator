@@ -8,18 +8,19 @@ const PurchasePriceSlider = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>
-        Purchase Price: ${purchasePrice.toLocaleString()}
+        Purchase Price: ${purchasePrice.toLocaleString()}{" "}
+        {/* Formatting for large numbers */}
       </Text>
       <Slider
         style={styles.slider}
         minimumValue={50000}
-        maximumValue={10000000}
-        step={1000}
+        maximumValue={100000000} // Adjust maximum value to allow for larger prices
+        step={10000} // Larger step size for better control over large numbers
         value={purchasePrice}
         onValueChange={(value) => setPurchasePrice(value)}
         minimumTrackTintColor="#1FB28A"
         maximumTrackTintColor="#D3D3D3"
-        thumbTintColor="#1FB28A"
+        thumbTintColor="#FF6347"
       />
     </View>
   );
@@ -38,8 +39,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   slider: {
-    width: "100%",
-    height: 40,
+    width: 300,
+    height: 50,
   },
 });
 
