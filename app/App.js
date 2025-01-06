@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 import PurchasePriceSlider from "./src/components/PurchasePriceSlider";
 import DownPaymentSlider from "./src/components/DownPaymentSlider";
+import RepaymentTimeSlider from "./src/components/RepaymentTimeSlider";
 
 export default function App() {
   return (
@@ -9,6 +10,7 @@ export default function App() {
       <StatusBar style="auto" />
       <PurchasePriceSlider />
       <DownPaymentSlider />
+      <RepaymentTimeSlider />
     </View>
   );
 }
