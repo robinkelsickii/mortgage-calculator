@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   slider: {
-    width: "100%",
-    height: 40,
+    width: 300,
+    height: 50,
   },
 });
 
