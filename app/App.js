@@ -1,10 +1,11 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import PurchasePriceSlider from "./src/components/PurchasePriceSlider";
 
 export default function App() {
   return (
     <View style={styles.container}>
+      <StatusBar style="auto" />
       <PurchasePriceSlider />
     </View>
   );
@@ -16,5 +17,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    padding: 20, // Added padding for better spacing
   },
 });
