@@ -17,6 +17,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    padding: 20, // Added padding for better spacing
+    padding: 20,
   },
 });
