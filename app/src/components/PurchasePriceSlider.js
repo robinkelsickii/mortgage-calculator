@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import Slider from "@react-native-community/slider";
+import { debounce } from "lodash";
 
 const PurchasePriceSlider = () => {
   const [purchasePrice, setPurchasePrice] = useState(50000);
+
+  const handleSliderChange = useCallback(
+    debounce((value) => {
+      setPurchasePrice(value);
+    }, 100),
+    []
+  );
 
   return (
     <View style={styles.container}>
@@ -17,7 +25,7 @@ const PurchasePriceSlider = () => {
         maximumValue={1500000} // Adjust maximum value to allow for larger prices
         step={1000} // Larger step size for better control over large numbers
         value={purchasePrice}
-        onValueChange={(value) => setPurchasePrice(value)}
+        onValueChange={handleSliderChange}
         minimumTrackTintColor="#1FB28A"
         maximumTrackTintColor="#D3D3D3"
         thumbTintColor="#FF6347"
