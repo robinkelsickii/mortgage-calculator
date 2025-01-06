@@ -5,6 +5,7 @@ import { debounce } from "lodash";
 
 const PurchasePriceSlider = () => {
   const [purchasePrice, setPurchasePrice] = useState(50000);
+  const [tempValue, setTempValue] = useState(50000);
 
   const handleSliderChange = useCallback(
     debounce((value) => {
@@ -12,6 +13,11 @@ const PurchasePriceSlider = () => {
     }, 100),
     []
   );
+
+  const handleSliderDrag = (value) => {
+    setTempValue(value); // Update the temporary value on drag
+    handleSliderChange(value); // Trigger the debounced state update
+  };
 
   return (
     <View style={styles.container}>
@@ -24,8 +30,8 @@ const PurchasePriceSlider = () => {
         minimumValue={50000}
         maximumValue={1500000} // Adjust maximum value to allow for larger prices
         step={1000} // Larger step size for better control over large numbers
-        value={purchasePrice}
-        onValueChange={handleSliderChange}
+        value={tempValue}
+        onValueChange={handleSliderDrag}
         minimumTrackTintColor="#1FB28A"
         maximumTrackTintColor="#D3D3D3"
         thumbTintColor="#FF6347"
