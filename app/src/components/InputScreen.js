@@ -21,31 +21,44 @@ const InputScreen = ({ navigation }) => {
   const [monthlyPayment, setMonthlyPayment] = useState(0);
 
   const calculateLoanAmount = () => {
-    setLoanAmount(purchasePrice - downPayment);
+    return purchasePrice - downPayment;
   };
 
-  const calculateMonthlyPayment = () => {
+  const calculateMonthlyPayment = (loanAmount, interestRate, repaymentTime) => {
     const P = loanAmount;
     const r = interestRate / 100 / 12;
     const n = repaymentTime * 12;
     if (r === 0) {
-      setMonthlyPayment(P / n);
+      return P / n;
     } else {
-      const M = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-      setMonthlyPayment(M);
+      return (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
     }
   };
 
   useEffect(() => {
-    calculateLoanAmount();
-  }, [purchasePrice, downPayment]);
-
-  useEffect(() => {
-    calculateMonthlyPayment();
-  }, [loanAmount, interestRate, repaymentTime]);
+    const calculatedLoanAmount = calculateLoanAmount();
+    setLoanAmount(calculatedLoanAmount);
+    const calculatedMonthlyPayment = calculateMonthlyPayment(
+      calculatedLoanAmount,
+      interestRate,
+      repaymentTime
+    );
+    setMonthlyPayment(calculatedMonthlyPayment);
+    console.log("Purchase Price:", purchasePrice);
+    console.log("Down Payment:", downPayment);
+    console.log("Repayment Time:", repaymentTime);
+    console.log("Interest Rate:", interestRate);
+    console.log("Loan Amount:", calculatedLoanAmount);
+    console.log("Monthly Payment:", calculatedMonthlyPayment);
+  }, [purchasePrice, downPayment, interestRate, repaymentTime]);
 
   const handleSubmit = () => {
-    navigation.navigate("Quote", { monthlyPayment, loanAmount });
+    console.log("Navigating with Loan Amount:", loanAmount);
+    console.log("Navigating with Monthly Payment:", monthlyPayment);
+    navigation.navigate("Quote", {
+      loanAmount,
+      monthlyPayment,
+    });
   };
 
   return (
@@ -54,19 +67,31 @@ const InputScreen = ({ navigation }) => {
         <View style={styles.sliderContainer}>
           <PurchasePriceSlider
             purchasePrice={purchasePrice}
-            setPurchasePrice={setPurchasePrice}
+            setPurchasePrice={(value) => {
+              setPurchasePrice(value);
+              console.log("Updated Purchase Price:", value);
+            }}
           />
           <DownPaymentSlider
             downPayment={downPayment}
-            setDownPayment={setDownPayment}
+            setDownPayment={(value) => {
+              setDownPayment(value);
+              console.log("Updated Down Payment:", value);
+            }}
           />
           <RepaymentTimeSlider
             repaymentTime={repaymentTime}
-            setRepaymentTime={setRepaymentTime}
+            setRepaymentTime={(value) => {
+              setRepaymentTime(value);
+              console.log("Updated Repayment Time:", value);
+            }}
           />
           <InterestRateSlider
             interestRate={interestRate}
-            setInterestRate={setInterestRate}
+            setInterestRate={(value) => {
+              setInterestRate(value);
+              console.log("Updated Interest Rate:", value);
+            }}
           />
           <TouchableOpacity style={styles.button} onPress={handleSubmit}>
             <Text style={styles.buttonText}>Get a Mortgage Quote!</Text>
