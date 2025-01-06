@@ -2,22 +2,21 @@ import React, { useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import Slider from "@react-native-community/slider";
 
-const PurchasePriceSlider = () => {
-  const [purchasePrice, setPurchasePrice] = useState(50000);
+const DownPaymentSlider = () => {
+  const [downPayment, setDownPayment] = useState(0);
 
   return (
     <View style={styles.container}>
       <Text style={styles.label}>
-        Purchase Price: ${purchasePrice.toLocaleString()}{" "}
-        {/* Formatting for large numbers */}
+        Down Payment: ${downPayment.toLocaleString()}
       </Text>
       <Slider
         style={styles.slider}
-        minimumValue={50000}
-        maximumValue={100000000} // Adjust maximum value to allow for larger prices
-        step={10000} // Larger step size for better control over large numbers
-        value={purchasePrice}
-        onValueChange={(value) => setPurchasePrice(value)}
+        minimumValue={0}
+        maximumValue={1000000}
+        step={10000}
+        value={downPayment}
+        onValueChange={(value) => setDownPayment(value)}
         minimumTrackTintColor="#1FB28A"
         maximumTrackTintColor="#D3D3D3"
         thumbTintColor="#FF6347"
@@ -44,4 +43,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PurchasePriceSlider;
+export default DownPaymentSlider;
