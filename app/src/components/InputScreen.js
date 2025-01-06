@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -7,16 +7,23 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import PurchasePriceSlider from "./PurchasePriceSlider";
 import DownPaymentSlider from "./DownPaymentSlider";
 import RepaymentTimeSlider from "./RepaymentTimeSlider";
 import InterestRateSlider from "./InterestRateSlider";
+import { debounce } from "lodash";
 
 const InputScreen = ({ navigation }) => {
-  const [purchasePrice, setPurchasePrice] = useState(50000);
-  const [downPayment, setDownPayment] = useState(0);
-  const [repaymentTime, setRepaymentTime] = useState(0);
-  const [interestRate, setInterestRate] = useState(0);
+  const initialPurchasePrice = 50000;
+  const initialDownPayment = 0;
+  const initialRepaymentTime = 0;
+  const initialInterestRate = 0;
+
+  const [purchasePrice, setPurchasePrice] = useState(initialPurchasePrice);
+  const [downPayment, setDownPayment] = useState(initialDownPayment);
+  const [repaymentTime, setRepaymentTime] = useState(initialRepaymentTime);
+  const [interestRate, setInterestRate] = useState(initialInterestRate);
   const [loanAmount, setLoanAmount] = useState(0);
   const [monthlyPayment, setMonthlyPayment] = useState(0);
 
@@ -35,30 +42,41 @@ const InputScreen = ({ navigation }) => {
     }
   };
 
-  useEffect(() => {
-    const calculatedLoanAmount = calculateLoanAmount();
-    setLoanAmount(calculatedLoanAmount);
-    const calculatedMonthlyPayment = calculateMonthlyPayment(
-      calculatedLoanAmount,
-      interestRate,
-      repaymentTime
-    );
-    setMonthlyPayment(calculatedMonthlyPayment);
-    console.log("Purchase Price:", purchasePrice);
-    console.log("Down Payment:", downPayment);
-    console.log("Repayment Time:", repaymentTime);
-    console.log("Interest Rate:", interestRate);
-    console.log("Loan Amount:", calculatedLoanAmount);
-    console.log("Monthly Payment:", calculatedMonthlyPayment);
-  }, [purchasePrice, downPayment, interestRate, repaymentTime]);
+  // Use debounce to only call the calculation function after a delay
+  const updateCalculations = useCallback(
+    debounce(() => {
+      const calculatedLoanAmount = calculateLoanAmount();
+      setLoanAmount(calculatedLoanAmount);
+      const calculatedMonthlyPayment = calculateMonthlyPayment(
+        calculatedLoanAmount,
+        interestRate,
+        repaymentTime
+      );
+      setMonthlyPayment(calculatedMonthlyPayment);
+    }, 500), // Adjust debounce delay to suit your needs
+    [purchasePrice, downPayment, interestRate, repaymentTime]
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      updateCalculations();
+    }, [updateCalculations])
+  );
 
   const handleSubmit = () => {
-    console.log("Navigating with Loan Amount:", loanAmount);
-    console.log("Navigating with Monthly Payment:", monthlyPayment);
     navigation.navigate("Quote", {
       loanAmount,
       monthlyPayment,
     });
+  };
+
+  const resetState = () => {
+    setPurchasePrice(initialPurchasePrice);
+    setDownPayment(initialDownPayment);
+    setRepaymentTime(initialRepaymentTime);
+    setInterestRate(initialInterestRate);
+    setLoanAmount(0);
+    setMonthlyPayment(0);
   };
 
   return (
@@ -69,28 +87,28 @@ const InputScreen = ({ navigation }) => {
             purchasePrice={purchasePrice}
             setPurchasePrice={(value) => {
               setPurchasePrice(value);
-              console.log("Updated Purchase Price:", value);
+              updateCalculations(); // Trigger calculation after value change
             }}
           />
           <DownPaymentSlider
             downPayment={downPayment}
             setDownPayment={(value) => {
               setDownPayment(value);
-              console.log("Updated Down Payment:", value);
+              updateCalculations(); // Trigger calculation after value change
             }}
           />
           <RepaymentTimeSlider
             repaymentTime={repaymentTime}
             setRepaymentTime={(value) => {
               setRepaymentTime(value);
-              console.log("Updated Repayment Time:", value);
+              updateCalculations(); // Trigger calculation after value change
             }}
           />
           <InterestRateSlider
             interestRate={interestRate}
             setInterestRate={(value) => {
               setInterestRate(value);
-              console.log("Updated Interest Rate:", value);
+              updateCalculations(); // Trigger calculation after value change
             }}
           />
           <TouchableOpacity style={styles.button} onPress={handleSubmit}>

@@ -1,23 +1,35 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import Slider from "@react-native-community/slider";
+import { debounce } from "lodash";
 
 const DownPaymentSlider = ({ downPayment, setDownPayment }) => {
+  const [tempValue, setTempValue] = useState(downPayment);
+
+  const handleSliderChange = useCallback(
+    debounce((value) => {
+      setDownPayment(value);
+    }, 100),
+    []
+  );
+
+  const handleSliderDrag = (value) => {
+    setTempValue(value);
+    handleSliderChange(value);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>
-        Down Payment: ${downPayment.toLocaleString()}
+        Down Payment: ${tempValue.toLocaleString()}
       </Text>
       <Slider
         style={styles.slider}
         minimumValue={0}
         maximumValue={1000000}
         step={1000}
-        value={downPayment}
-        onValueChange={(value) => {
-          setDownPayment(value);
-          console.log("Updated Down Payment:", value);
-        }}
+        value={tempValue}
+        onValueChange={handleSliderDrag}
         minimumTrackTintColor="#1FB28A"
         maximumTrackTintColor="#D3D3D3"
         thumbTintColor="#FF6347"

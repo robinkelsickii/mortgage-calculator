@@ -24,6 +24,10 @@ const QuoteScreen = ({ route, navigation }) => {
       })
     : "N/A";
 
+  const handleBackToInput = () => {
+    navigation.navigate("Input", { reset: true });
+  };
+
   return (
     <SafeAreaView style={styles.safeContainer}>
       <View style={styles.container}>
@@ -39,11 +43,8 @@ const QuoteScreen = ({ route, navigation }) => {
           <Text style={styles.value}>${displayMonthlyPayment}</Text>
         </View>
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("Input")}
-        >
-          <Text style={styles.buttonText}>Back to Input</Text>
+        <TouchableOpacity style={styles.button} onPress={handleBackToInput}>
+          <Text style={styles.buttonText}>Back to Calculator</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

@@ -1,23 +1,33 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import Slider from "@react-native-community/slider";
+import { debounce } from "lodash";
 
 const InterestRateSlider = ({ interestRate, setInterestRate }) => {
+  const [tempValue, setTempValue] = useState(interestRate);
+
+  const handleSliderChange = useCallback(
+    debounce((value) => {
+      setInterestRate(value);
+    }, 100),
+    []
+  );
+
+  const handleSliderDrag = (value) => {
+    setTempValue(value);
+    handleSliderChange(value);
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>
-        Interest Rate: {interestRate.toFixed(2)}%
-      </Text>
+      <Text style={styles.label}>Interest Rate: {tempValue.toFixed(2)}%</Text>
       <Slider
         style={styles.slider}
         minimumValue={0}
         maximumValue={20}
         step={0.1}
-        value={interestRate}
-        onValueChange={(value) => {
-          setInterestRate(value);
-          console.log("Updated Interest Rate:", value);
-        }}
+        value={tempValue}
+        onValueChange={handleSliderDrag}
         minimumTrackTintColor="#1FB28A"
         maximumTrackTintColor="#D3D3D3"
         thumbTintColor="#FF6347"
